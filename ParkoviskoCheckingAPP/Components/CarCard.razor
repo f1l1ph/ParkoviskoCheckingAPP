@@ -1,0 +1,48 @@
+﻿@using ParkoviskoCheckingAPP.Data
+@inject CarService service
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <button type="button" @onclick="DeleteCar" class="image-button">
+                <img src="Images/delete.png" alt="Delete" width="@imgSize" height="@imgSize" />
+            </button>
+        </div>
+
+        <div style="flex-grow: 1; text-align: center;">
+            <h3 style="margin: 0; padding: 0;">@car.Name</h3>
+        </div>
+
+        <div>
+            <button type="button" @onclick="EditCar" class="image-button">
+                <img src="Images/edit.png" alt="Right Image" width="@imgSize" height="@imgSize" />
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <p><strong>ID:</strong> @car.ID</p>
+        <p><strong>Name:</strong> @car.Name</p>
+        <p><strong>Plate Number:</strong> @car.PlateNumber</p>
+        <p><strong>Expiration Date:</strong> @car.ExpirationDate</p>
+        <p><strong>Description:</strong> @car.Description</p>
+    </div>
+</div>
+
+@code {
+    private readonly int imgSize = 18;
+    [Parameter] public Car car{ get; set; }
+    [Parameter] public Func<Task> refresh { get; set; }
+
+    void EditCar()
+    {
+        Console.WriteLine("editing");
+       // await refresh?.Invoke();
+    }
+    void DeleteCar()
+    {
+        //delete car
+        //refresh();
+        car.ID = 000;
+    }
+}

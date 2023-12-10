@@ -1,0 +1,26 @@
+﻿@page "/lpr"
+
+<h3>LPR_Page</h3>
+
+<InputFile OnChange="HandleFileSelected" accept="image/*" />
+<img src="@imageUrl" alt="" width="300" />
+
+@code {
+    
+    @using ParkoviskoCheckingAPP.services
+    @inject LicensePlateReaderService service
+    
+    
+    private string imageUrl = null;
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles().FirstOrDefault();
+        if (file != null)
+        {
+            // Handle the uploaded file, e.g., save it and set the image URL
+            
+            imageUrl = "/path/to/uploaded/image.jpg"; // Update this with your file handling logic
+        }
+    }
+}

@@ -1,0 +1,85 @@
+﻿@page "/ViewCars"
+
+@using Microsoft.AspNetCore.Components.Rendering
+@using ParkoviskoCheckingAPP.Data
+@inject CarService service
+@using ParkoviskoCheckingAPP.Components
+
+<button @onclick="Refresh">Refresh</button>
+
+<button @onclick="GetCarByID"> Get car by id</button>
+<input type="number" @bind="ID" />
+
+@if (haveInternet)
+{
+    <p>I have internet</p>
+}
+else
+{
+    <p>I don't have internet ): </p>
+}
+
+<div class="card-container">
+    @if (car != null)
+    {
+        <CarCard car=car/>
+    }
+
+    @if (cars == null || cars.Count == 0)
+    {
+        @if (cars != null && cars.Count == 0)
+        {
+            <p><em>Haven't found any cars</em></p>
+        }
+        else
+        {
+            <p><em>Loading...</em></p>
+        }
+    }
+    else
+    {
+        @foreach(var car_ in cars)
+        {
+            @((RenderTreeBuilder builder) => RenderCarCard(builder, car_))
+        }
+    }
+</div>
+
+@code {
+    //check for internet connection
+    NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+    bool haveInternet = false;
+    private List<Car> cars = null;
+
+    int ID;
+    private Car car = null; 
+
+    void RenderCarCard(RenderTreeBuilder builder, Car car)
+    {
+        builder.OpenComponent(0, typeof(CarCard));
+        builder.AddAttribute(1, "car", car);
+        //builder.AddAttribute(2, "refresh", Refresh());
+        builder.CloseComponent();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();  
+
+        if (accessType == NetworkAccess.Internet)
+        {
+            haveInternet = true;
+        }
+    }
+
+    async Task Refresh()
+    {
+        cars = await service.GetCarsAsync();
+    }
+
+    async Task GetCarByID()
+    {
+        car = await service.GetCarAsync(ID);
+        ID = 0;
+    }
+}
