@@ -1,6 +1,7 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
+    background-color: #1e1e1e;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -90,25 +91,85 @@ a, .btn-link {
 }
 
 .card {
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 8px;
     overflow: hidden;
     margin: 20px;
     width: 300px;
+    background-color: #1e1e1e;
+}
+
+.card-dark {
+    color: #fff; /* Light text color for dark theme */
 }
 
 .card-header {
-    background-color: #f5f5f5;
+    background-color: #333;
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #555;
 }
 
 .card-body {
     padding: 15px;
 }
 
+.card-body-dark {
+    color: #ccc; /* Lighter text color for dark theme */
+}
+
 .image-button {
     border: none; 
-    outline: none; 
+    outline: none;
+    background-color: transparent;
+}
+/*for dark mode*/
+body {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    text-align: center;
+    /*padding-top: 50px;*/
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+label {
+    /*display: block;*/
+    margin-bottom: 10px;
+}
+
+input {
+   /* width: 100%;*/
+    padding: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    background-color: #333333;
+    color: #ffffff;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+h3 {
+    margin-top: 30px;
 }

@@ -2,10 +2,10 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ParkoviskoCheckingAPP"
-             x:Class="ParkoviskoCheckingAPP.App">
+             x:Class="ParkoviskoCheckingAPP.App"
+             >
     <Application.Resources>
         <ResourceDictionary>
-
             <Color x:Key="PageBackgroundColor">#512bdf</Color>
             <Color x:Key="PrimaryTextColor">White</Color>
 
@@ -20,7 +20,6 @@
                 <Setter Property="BackgroundColor" Value="#2b0b98" />
                 <Setter Property="Padding" Value="14,10" />
             </Style>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

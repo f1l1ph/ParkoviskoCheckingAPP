@@ -1,26 +1,62 @@
-﻿@page "/lpr"
+﻿@using ParkoviskoCheckingAPP.Data;
+@inject CarService service
 
-<h3>LPR_Page</h3>
+@using ParkoviskoCheckingAPP.Components
+@using Microsoft.AspNetCore.Components.Rendering
 
-<InputFile OnChange="HandleFileSelected" accept="image/*" />
-<img src="@imageUrl" alt="" width="300" />
+@page "/lpr"
 
-@code {
-    
-    @using ParkoviskoCheckingAPP.services
-    @inject LicensePlateReaderService service
-    
-    
-    private string imageUrl = null;
+<div class="custom_div">
+    <div>
+        <label for="licensePlate">Enter License Plate:</label>
+        <input type="text" @bind="plate" id="plate"/>
+    </div>
+    <br />
+    <button @onclick="FindCar">Process License Plate</button>
+</div>
 
-    private void HandleFileSelected(InputFileChangeEventArgs e)
+<div class="card-container">
+    @if (car != null)
     {
-        var file = e.GetMultipleFiles().FirstOrDefault();
-        if (file != null)
-        {
-            // Handle the uploaded file, e.g., save it and set the image URL
-            
-            imageUrl = "/path/to/uploaded/image.jpg"; // Update this with your file handling logic
-        }
+        <CarCard car="car" Refresh="OnDelete" />
+    }
+    
+    @if(car == null && triedToFind == true)
+    {
+        <p>I am sorry but this car does not exist</p>
+    }
+
+</div>
+@code {
+    Car car;
+    string plate;
+    bool triedToFind = false;
+
+    async Task FindCar()
+    {
+        car = await service.GetCarByPlateAsync(plate);
+        triedToFind = true;
+    }
+
+    void OnDelete()
+    {
+        triedToFind = false;
+        car = null;
     }
 }
+
+<style>
+    .custom_div {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .card-container{
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>

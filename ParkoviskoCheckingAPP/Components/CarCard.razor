@@ -1,8 +1,8 @@
 ﻿@using ParkoviskoCheckingAPP.Data
 @inject CarService service
 
-<div class="card">
-    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div class="card card-dark">
+    <div class="card-header card-header-dark" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
             <button type="button" @onclick="DeleteCar" class="image-button">
                 <img src="Images/delete.png" alt="Delete" width="@imgSize" height="@imgSize" />
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body card-body-dark">
         <p><strong>ID:</strong> @car.ID</p>
         <p><strong>Name:</strong> @car.Name</p>
         <p><strong>Plate Number:</strong> @car.PlateNumber</p>
@@ -32,17 +32,20 @@
 @code {
     private readonly int imgSize = 18;
     [Parameter] public Car car{ get; set; }
-    [Parameter] public Func<Task> refresh { get; set; }
+    [Parameter] public EventCallback Refresh { get; set; }
 
-    void EditCar()
+    async Task EditCar()
     {
         Console.WriteLine("editing");
-       // await refresh?.Invoke();
+        await Refresh.InvokeAsync();
+
     }
-    void DeleteCar()
+    async Task DeleteCar()
     {
-        //delete car
-        //refresh();
-        car.ID = 000;
+        await service.DeleteCar(car.ID.ToString());
+
+        //pop-up window asking if user realy wants to delete car
+
+        await Refresh.InvokeAsync();
     }
 }

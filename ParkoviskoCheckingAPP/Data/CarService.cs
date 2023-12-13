@@ -35,7 +35,7 @@ namespace ParkoviskoCheckingAPP.Data
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetAllCars");
+                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetAll");
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -57,7 +57,7 @@ namespace ParkoviskoCheckingAPP.Data
 
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetCarByID/" + id);
+                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetById/" + id);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -70,7 +70,44 @@ namespace ParkoviskoCheckingAPP.Data
             }
             return car;
         }
+        public async Task<Car> GetCarByPlateAsync(string licensePlate)
+        {
+            Car car = null;
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetByPlate/" + licensePlate);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    car = JsonSerializer.Deserialize<Car>(content, _serializerOptions);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return car;
+        }
+
+        public async Task<bool> DeleteCar(string id) 
+        {
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteAsync(carURL + "/Car/DeleteById/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return true; 
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return false;
+        } 
     }
-
-
 }

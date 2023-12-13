@@ -1,39 +1,39 @@
 ﻿using IronOcr;
 
-
-namespace ParkoviskoCheckingAPP.services
+namespace ParkoviskoCheckingAPP.services;
+//make this just an API call with Image
+public class LicensePlateReaderService
 {
-    public class LicensePlateReaderService
-    {
-		public void ReadPlate(string pathToImage)
-		{
-			var Ocr = new IronTesseract();
-			using (var Input = new OcrInput(pathToImage))
-			{
-				Ocr.Configuration.BlackListCharacters = "!@#$%^&'*()_+-{}[]:;/>.<,qwertyuiopasdfghjklzxcvbnm";
-				Ocr.Configuration.PageSegmentationMode = TesseractPageSegmentationMode.SingleWord;
-				Ocr.Language = OcrLanguage.Slovak;
-				Input.ReplaceColor(IronSoftware.Drawing.Color.DarkBlue, IronSoftware.Drawing.Color.White, 50);
-				Input.ReplaceColor(IronSoftware.Drawing.Color.Blue, IronSoftware.Drawing.Color.White, 50);
+	public static async Task<string> ReadPlate(byte[] img)
+	{
+		var Ocr = new IronTesseract();
 
-				//Input.SaveAsImages("image_Saved2");
+        //var imageData = Convert.FromBase64String(base64Image);
 
-				Input.Deskew();
-				Input.Contrast();
-				Input.Scale(50);
-				Input.Dilate();
-				//Input.Despeckle();
-				Input.Erode();
-				Input.DeNoise();
-				//Input.Sharpen();
+        //var tempImagePath = "temp_image.png";
+        //await File.WriteAllBytesAsync(tempImagePath, imageData);
+        using var Input = new OcrInput(img);//tuto to vzdy padne
+        Ocr.Configuration.BlackListCharacters = "!@#$%^&'*()_+-{}[]:;/>.<,qwertyuiopasdfghjklzxcvbnm";
+        Ocr.Configuration.PageSegmentationMode = TesseractPageSegmentationMode.SingleWord;
+        //Ocr.Language = OcrLanguage.Slovak;
+        Input.ReplaceColor(IronSoftware.Drawing.Color.DarkBlue, IronSoftware.Drawing.Color.White, 50);
+        Input.ReplaceColor(IronSoftware.Drawing.Color.Blue, IronSoftware.Drawing.Color.White, 50);
 
-				Input.SaveAsImages("image_Saved");
-				Input.FindTextRegion();
-				//detekuj hrany,
-				var Result = Ocr.Read(Input);
-				Console.WriteLine(Result.Text);
-			}
-		}
-	
+        Input.Deskew();
+        Input.Contrast();
+        Input.Scale(50);
+        Input.Dilate();
+        //Input.Despeckle();
+        Input.Erode();
+        Input.DeNoise();
+        //Input.Sharpen();
+
+        //Input.SaveAsImages("image_Saved");
+        Input.FindTextRegion();
+        //ToDo detekuj hrany,
+        var Result = await Ocr.ReadAsync(Input);
+
+        //File.Delete(tempImagePath);
+        return (Result.Text);
     }
 }

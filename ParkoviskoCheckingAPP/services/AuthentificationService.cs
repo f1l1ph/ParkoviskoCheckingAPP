@@ -6,7 +6,7 @@ namespace ParkoviskoCheckingAPP.services;
 
 public class AuthentificationService
 {
-    string tokenKey = "AuthToken";
+    readonly string tokenKey = "AuthToken";
 
     HttpClient _client;
     JsonSerializerOptions _serializerOptions;
@@ -52,10 +52,4 @@ public class AuthentificationService
     {
         return await SecureStorage.GetAsync(tokenKey);
     }
-
-    //var value = await SecureStorage.GetAsync(AuthToken); //--for getting value
-
-    //function for http request to /login
-
-    //function for try login on app start-up using already stored tokenKey
 }

@@ -7,8 +7,8 @@
 
 <button @onclick="Refresh">Refresh</button>
 
-<button @onclick="GetCarByID"> Get car by id</button>
-<input type="number" @bind="ID" />
+<!--<button @onclick="GetCarByID"> Get car by id</button>
+<input type="number" @bind="ID" />-->
 
 @if (haveInternet)
 {
@@ -40,7 +40,7 @@ else
     {
         @foreach(var car_ in cars)
         {
-            @((RenderTreeBuilder builder) => RenderCarCard(builder, car_))
+            <CarCard car="car_" Refresh="Refresh"/>
         }
     }
 </div>
@@ -53,14 +53,6 @@ else
 
     int ID;
     private Car car = null; 
-
-    void RenderCarCard(RenderTreeBuilder builder, Car car)
-    {
-        builder.OpenComponent(0, typeof(CarCard));
-        builder.AddAttribute(1, "car", car);
-        //builder.AddAttribute(2, "refresh", Refresh());
-        builder.CloseComponent();
-    }
 
     protected override async Task OnInitializedAsync()
     {
