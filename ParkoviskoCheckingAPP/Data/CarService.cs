@@ -1,5 +1,6 @@
 ﻿using ParkoviskoCheckingAPP.services;
 using System.Diagnostics;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace ParkoviskoCheckingAPP.Data
@@ -49,7 +50,6 @@ namespace ParkoviskoCheckingAPP.Data
             return cars;
         }
 
-
         public async Task<Car> GetCarAsync(int id)
         {
             Car car = null;
@@ -70,6 +70,7 @@ namespace ParkoviskoCheckingAPP.Data
             }
             return car;
         }
+
         public async Task<Car> GetCarByPlateAsync(string licensePlate)
         {
             Car car = null;
@@ -109,5 +110,31 @@ namespace ParkoviskoCheckingAPP.Data
             }
             return false;
         } 
+
+        public async Task<bool> AddCar(Car car)
+        {
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+            try
+            {
+                HttpResponseMessage response = await _client.PostAsJsonAsync(carURL + "/Car/Create", 
+                    new { 
+                        id = car.ID, 
+                        name = car.Name, 
+                        plateNumber = car.PlateNumber,
+                        expirationDate = car.ExpirationDate,
+                        description = car.Description 
+                    });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return false;
+        }
     }
 }

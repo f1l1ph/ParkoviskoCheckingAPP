@@ -5,7 +5,7 @@
 @inject CarService service
 @using ParkoviskoCheckingAPP.Components
 
-<button @onclick="Refresh">Refresh</button>
+<button class="btn btn-primary" @onclick="Refresh">Refresh</button>
 
 <!--<button @onclick="GetCarByID"> Get car by id</button>
 <input type="number" @bind="ID" />-->
@@ -22,7 +22,7 @@ else
 <div class="card-container">
     @if (car != null)
     {
-        <CarCard car=car/>
+        <CarCard car=car Refresh="Refresh" />
     }
 
     @if (cars == null || cars.Count == 0)

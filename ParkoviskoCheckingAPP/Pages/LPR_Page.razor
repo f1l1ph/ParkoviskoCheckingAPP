@@ -2,7 +2,6 @@
 @inject CarService service
 
 @using ParkoviskoCheckingAPP.Components
-@using Microsoft.AspNetCore.Components.Rendering
 
 @page "/lpr"
 
@@ -12,7 +11,7 @@
         <input type="text" @bind="plate" id="plate"/>
     </div>
     <br />
-    <button @onclick="FindCar">Process License Plate</button>
+    <button class="btn btn-primary" @onclick="FindCar">Process License Plate</button>
 </div>
 
 <div class="card-container">
@@ -25,7 +24,6 @@
     {
         <p>I am sorry but this car does not exist</p>
     }
-
 </div>
 @code {
     Car car;
