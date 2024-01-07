@@ -22,11 +22,9 @@ namespace ParkoviskoCheckingAPP
 			builder.Services.AddBlazorWebViewDeveloperTools();
 			builder.Logging.AddDebug();
 #endif
-
+			//builder.Services.AddHttpClient<AuthentificationService>();
 			builder.Services.AddSingleton<AuthentificationService>();
 			builder.Services.AddSingleton<CarService>();
-            builder.Services.AddSingleton<LicensePlateReaderService>();
-
 
             return builder.Build();
 		}

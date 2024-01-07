@@ -76,9 +76,9 @@
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-        <PackageReference Include="Refit" Version="7.0.0" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="Tesseract" Version="5.2.0" />
-        <PackageReference Include="Tesseract.Net.SDK" Version="4.5.411" />
     </ItemGroup>
 
   <!-- Build Properties must be defined within these property groups to ensure successful publishing

@@ -15,6 +15,12 @@ public class AuthentificationService
     public string userURL = "http://192.168.1.35:5026";
 
     TokenLoginModel tlm;
+
+    //public TypedClientModel(AuthentificationService authentificationService)
+    //{
+    //    _authentificationService = authentificationService;
+    //}
+
     public AuthentificationService()
     {
         _client = new HttpClient();

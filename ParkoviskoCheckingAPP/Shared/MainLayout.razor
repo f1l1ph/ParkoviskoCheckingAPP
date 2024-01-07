@@ -1,8 +1,12 @@
 ﻿@inherits LayoutComponentBase
 @using ParkoviskoCheckingAPP.Shared;
+@using ParkoviskoCheckingAPP.services;
+@inject AuthentificationService service
+@using ParkoviskoCheckingAPP.Data
+@using System.Runtime.InteropServices
 
 <div class="page">
-    @if(authentificated == false)
+    @if(authentificated != true)
     {
         <div class="login-container">
             @if (haveInternet)
@@ -32,10 +36,15 @@
             </div>
 
             <button class="btn btn-primary" @onclick="Login">Login</button>
+
+            <div style=" display: flex; align-items: center; margin-top:5px;">
+                <p for="myCheckbox" style="margin-right: 7px; ">Remember me</p>
+                <input type="checkbox" id="myCheckbox" @bind="isChecked" style="width: 20px; height: 20px; vertical-align: middle;" />
+            </div>
         </div>
     }
 
-    @if (authentificated == true)
+    @if (authentificated != false)
     {
         <div class="sidebar">
             <NavMenu/>
@@ -49,12 +58,13 @@
     }
 </div>
 
-@using ParkoviskoCheckingAPP.services;
-@inject AuthentificationService service
-@using ParkoviskoCheckingAPP.Data
-@using System.Runtime.InteropServices
-
 @code{
+    bool isChecked = false;
+    string isCheckedKey = "Checked";
+
+    string userNameKey = "Username";
+    string passwordKey = "Password";
+
     NetworkAccess accessType = Connectivity.Current.NetworkAccess;
     bool haveInternet = false;
 
@@ -69,13 +79,47 @@
         LoginModel model = new LoginModel { UserName = username, Email = "", Password = password };
         authentificated = await service.Login(model);
         triedLogin = true;
+
+        if(isChecked == true)
+        {
+            await SaveLoginParamas(username, password);
+            await SecureStorage.SetAsync(isCheckedKey, "true");
+        }
+        else
+        {
+            await SecureStorage.SetAsync(isCheckedKey, "false");
+        }
     }
 
-    protected override void OnInitialized()
+    private async Task SaveLoginParamas(string userName_, string password_)
+    {
+        await SecureStorage.SetAsync(userNameKey, userName_);
+        await SecureStorage.SetAsync(passwordKey, password_);
+    }
+
+    private async Task LoginParam(string userName_, string password_)
+    {
+        LoginModel model = new LoginModel { UserName = userName_, Email = "", Password = password_ };
+        authentificated = await service.Login(model);
+
+        triedLogin = true;
+    }
+
+    protected override async Task OnInitializedAsync()
     {
         if (accessType == NetworkAccess.Internet)
         {
             haveInternet = true;
+        }
+
+        if (await SecureStorage.GetAsync(isCheckedKey) != "false")
+        {
+            //start animation here
+
+            var name_ = await SecureStorage.GetAsync(userNameKey);
+            var password_ = await SecureStorage.GetAsync(passwordKey);
+
+            await LoginParam(name_, password_);
         }
     }
 }
