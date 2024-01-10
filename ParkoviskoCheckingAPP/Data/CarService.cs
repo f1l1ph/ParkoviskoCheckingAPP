@@ -8,7 +8,6 @@ namespace ParkoviskoCheckingAPP.Data;
 
 public class CarService
 {
-
     HttpClient _client;
     JsonSerializerOptions _serializerOptions;
     public string carURL = "https://localhost:7069/Car";
@@ -21,8 +20,8 @@ public class CarService
     { 
         authService_ = authService;
 
-        //_client = new HttpClient();
-        //_client.BaseAddress = new Uri(carURL);
+        _client = new HttpClient();
+        _client.BaseAddress = new Uri(carURL);
         _serializerOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -32,9 +31,34 @@ public class CarService
     
     public async Task<List<Car>> GetCarsAsync()
     {
-        var carApi = RestService.For<IAPI>(carURL);
-        var cars = await carApi.GetAllCars();
-        return cars;
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            var cars = await carApi.GetAllCars(token.ToString());
+            return cars;
+        }
+        catch(ApiException ex) 
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return null;
+
+            /* var errors = await e.GetContentAsAsync<string>();
+
+             //todo - handle exceptions better
+             //var message = string.Join("; ", errors.Values);
+
+             return null;
+             throw new Exception(errors);*/
+        }
+
+        /*if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(response.Content.Message);
+        }
+        var cars = response.Content.Result;
+        return cars;*/
 
         /*List<Car> cars;
 
@@ -58,28 +82,58 @@ public class CarService
 
     public async Task<Car> GetCarAsync(int id)
     {
-        Car car = null;
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
-
         try
         {
-            HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetById/" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                string content = await response.Content.ReadAsStringAsync();
-                car = JsonSerializer.Deserialize<Car>(content, _serializerOptions);
-            }
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            var car = await carApi.GetCarByID(id ,token.ToString());
+            return car;
         }
-        catch(Exception ex)
+        catch (ApiException ex)
         {
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return null;
         }
-        return car;
-    }
+
+
+            /*
+            Car car = null;
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(carURL + "/Car/GetById/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    car = JsonSerializer.Deserialize<Car>(content, _serializerOptions);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return car;*/
+        }
 
     public async Task<Car> GetCarByPlateAsync(string licensePlate)
     {
-        Car car = null;
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            var car = await carApi.GetCarByPlate(licensePlate, token.ToString());
+            return car;
+        }
+        catch (ApiException ex)
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return null;
+        }
+
+        /*Car car = null;
         _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
 
         try
@@ -95,12 +149,26 @@ public class CarService
         {
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
         }
-        return car;
+        return car;*/
     }
 
-    public async Task<bool> DeleteCar(string id) 
+    public async Task<bool> DeleteCar(int id) 
     {
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            await carApi.DeleteCar(id, token.ToString());
+            return true;
+        }
+        catch (ApiException ex)
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return false;
+        }
+
+        /*_client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
 
         try
         {
@@ -114,11 +182,26 @@ public class CarService
         {
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
         }
-        return false;
+        return false;*/
     } 
 
     public async Task<bool> AddCar(Car car)
     {
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            await carApi.CreateNewCar(car, token.ToString());
+            return true;
+        }
+        catch (ApiException ex)
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return false;
+        }
+
+        /*
         _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
         try
         {
@@ -140,6 +223,6 @@ public class CarService
         {
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
         }
-        return false;
+        return false;*/
     }
 }

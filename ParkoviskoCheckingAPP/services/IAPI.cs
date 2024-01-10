@@ -3,27 +3,26 @@ using Refit;
 
 namespace ParkoviskoCheckingAPP.services;
 
-//[Headers("Authorization")]
 public interface IAPI
 {
     [Get("/GetByID/{id}")]
-    Task GetCarByID(int id);
+    Task<Car> GetCarByID(int id, [Header("Authorization")] string bearerToken);
 
     [Get("/GetByPlate/{plate}")]
-    Task GetCarByPlate(string plate);
+    Task<Car> GetCarByPlate(string plate, [Header("Authorization")] string bearerToken);
 
     [Get("/GetAll")]
-    Task<List<Car>> GetAllCars();
+    Task<List<Car>> GetAllCars([Header("Authorization")] string bearerToken);
 
     [Get("/CheckForExisting/{plate}")]
-    Task CheckForExistingCar(string plate);
+    Task<Car> CheckForExistingCar(string plate, [Header("Authorization")] string bearerToken);
 
     [Post("/Create")]
-    Task CreateNewCar(Car car);
+    Task CreateNewCar(Car car, [Header("Authorization")] string bearerToken);
 
     [Post("/Edit")]
-    Task EditCar(int id, Car car);
+    Task EditCar(int id, Car car, [Header("Authorization")] string bearerToken);
 
     [Delete("/DeleteById/{id}")]
-    Task DeleteCar(int id);
+    Task<bool> DeleteCar(int id, [Header("Authorization")] string bearerToken);
 }

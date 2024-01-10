@@ -10,9 +10,9 @@ public class AuthentificationService
 
     HttpClient _client;
     JsonSerializerOptions _serializerOptions;
-    //public string userURL = "https://localhost:7069";
+    public string userURL = "https://localhost:7069";
     //public string userURL = "http://10.0.2.2:5026";
-    public string userURL = "http://192.168.1.35:5026";
+    //public string userURL = "http://192.168.1.35:5026";
 
     TokenLoginModel tlm;
 

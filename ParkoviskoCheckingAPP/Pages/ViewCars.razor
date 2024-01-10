@@ -7,9 +7,6 @@
 
 <button class="btn btn-primary" @onclick="Refresh">Refresh</button>
 
-<!--<button @onclick="GetCarByID"> Get car by id</button>
-<input type="number" @bind="ID" />-->
-
 @if (haveInternet)
 {
     <p>I have internet</p>
@@ -20,11 +17,6 @@ else
 }
 
 <div class="card-container">
-    @if (car != null)
-    {
-        <CarCard car=car Refresh="Refresh" />
-    }
-
     @if (cars == null || cars.Count == 0)
     {
         @if (cars != null && cars.Count == 0)
@@ -33,7 +25,14 @@ else
         }
         else
         {
-            <p><em>Loading...</em></p>
+            @if(cars == null && haveRefreshed)
+            {
+                <p>No cars sorry</p>
+            }
+            else
+            {
+                <p><em>Loading...</em></p>
+            }
         }
     }
     else
@@ -50,9 +49,7 @@ else
     NetworkAccess accessType = Connectivity.Current.NetworkAccess;
     bool haveInternet = false;
     private List<Car> cars = null;
-
-    int ID;
-    private Car car = null; 
+    bool haveRefreshed = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,11 +64,6 @@ else
     async Task Refresh()
     {
         cars = await service.GetCarsAsync();
-    }
-
-    async Task GetCarByID()
-    {
-        car = await service.GetCarAsync(ID);
-        ID = 0;
+        haveRefreshed = true;
     }
 }
