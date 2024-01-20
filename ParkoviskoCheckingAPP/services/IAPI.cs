@@ -21,7 +21,7 @@ public interface IAPI
     Task CreateNewCar(Car car, [Header("Authorization")] string bearerToken);
 
     [Post("/Edit")]
-    Task EditCar(int id, Car car, [Header("Authorization")] string bearerToken);
+    Task<bool> EditCar (int id, Car car, [Header("Authorization")] string bearerToken);
 
     [Delete("/DeleteById/{id}")]
     Task<bool> DeleteCar(int id, [Header("Authorization")] string bearerToken);

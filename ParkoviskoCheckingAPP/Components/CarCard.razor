@@ -33,12 +33,12 @@
     private readonly int imgSize = 18;
     [Parameter] public Car car{ get; set; }
     [Parameter] public EventCallback Refresh { get; set; }
+    [Parameter] public EventCallback<int> Edit { get; set; }
+
 
     async Task EditCar()
     {
-        Console.WriteLine("editing");
-        await Refresh.InvokeAsync();
-
+        await Edit.InvokeAsync(car.ID);
     }
     async Task DeleteCar()
     {

@@ -23,24 +23,31 @@
                 <p> <em>wrong username or password, sorry</em></p>
             }
 
-            <h1>Login</h1>
+            @if (loading == true)
+            {
+                  <div class="loader"></div>
+            }
+            else
+            {
+                <h1>Login</h1>
 
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input id="username" @bind="username" class="form-control" />
-            </div>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input id="username" @bind="username" class="form-control" />
+                </div>
 
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" @bind="password" class="form-control" />
-            </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" @bind="password" class="form-control" />
+                </div>
 
-            <button class="btn btn-primary" @onclick="Login">Login</button>
+                <button class="btn btn-primary" @onclick="Login">Login</button>
 
-            <div style=" display: flex; align-items: center; margin-top:5px;">
-                <p for="myCheckbox" style="margin-right: 7px; ">Remember me</p>
-                <input type="checkbox" id="myCheckbox" @bind="isChecked" style="width: 20px; height: 20px; vertical-align: middle;" />
-            </div>
+                <div style=" display: flex; align-items: center; margin-top:5px;">
+                    <p for="myCheckbox" style="margin-right: 7px; ">Remember me</p>
+                    <input type="checkbox" id="myCheckbox" @bind="isChecked" style="width: 20px; height: 20px; vertical-align: middle;" />
+                </div>
+            }
         </div>
     }
 
@@ -59,6 +66,8 @@
 </div>
 
 @code{
+    bool loading = true;
+
     bool isChecked = false;
     string isCheckedKey = "Checked";
 
@@ -76,10 +85,12 @@
 
     private async Task Login()
     {
+        loading = true;
         LoginModel model = new LoginModel { UserName = username, Email = "", Password = password };
         authentificated = await service.Login(model);
         triedLogin = true;
 
+        loading = authentificated;
         if(isChecked == true)
         {
             await SaveLoginParamas(username, password);
@@ -101,7 +112,7 @@
     {
         LoginModel model = new LoginModel { UserName = userName_, Email = "", Password = password_ };
         authentificated = await service.Login(model);
-
+        loading = false;
         triedLogin = true;
     }
 
@@ -114,12 +125,15 @@
 
         if (await SecureStorage.GetAsync(isCheckedKey) != "false")
         {
-            //start animation here
+            loading = true;
 
             var name_ = await SecureStorage.GetAsync(userNameKey);
             var password_ = await SecureStorage.GetAsync(passwordKey);
 
             await LoginParam(name_, password_);
+        }else
+        {
+            loading = false;
         }
     }
 }

@@ -16,7 +16,7 @@ else
     <p>I don't have internet ): </p>
 }
 
-<div class="card-container">
+<div class="centered">
     @if (cars == null || cars.Count == 0)
     {
         @if (cars != null && cars.Count == 0)
@@ -31,20 +31,32 @@ else
             }
             else
             {
-                <p><em>Loading...</em></p>
+                <div class="loader"></div>
             }
         }
     }
     else
     {
-        @foreach(var car_ in cars)
+        @if (editing == false)
         {
-            <CarCard car="car_" Refresh="Refresh"/>
+            <div class="card-container">
+                @foreach (var car_ in cars)
+                {
+                    <CarCard car="car_" Refresh="Refresh" Edit="EditCar" />
+                }
+            </div>
+        }
+        @if (editing == true)
+        {
+            <EditCarComponent car="carToEdit" Refresh="Refresh" />
         }
     }
 </div>
 
 @code {
+    bool editing = false;
+    public Car carToEdit = null;
+
     //check for internet connection
     NetworkAccess accessType = Connectivity.Current.NetworkAccess;
     bool haveInternet = false;
@@ -65,5 +77,26 @@ else
     {
         cars = await service.GetCarsAsync();
         haveRefreshed = true;
+        editing = false;
+    }
+
+    async Task EditCar(int carID)
+    {
+        editing = true;
+        carToEdit = await service.GetCarAsync(carID);
     }
 }
+
+<style>
+
+    .centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loader{
+            width: 100px;
+            height: 100px;
+    }
+</style>

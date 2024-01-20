@@ -95,8 +95,6 @@ public class CarService
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
             return null;
         }
-
-
             /*
             Car car = null;
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
@@ -224,5 +222,22 @@ public class CarService
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
         }
         return false;*/
+    }
+
+    public async Task<bool> EditCar(int id, Car car)
+    {
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await authService_.GetToken());
+
+            var carApi = RestService.For<IAPI>(carURL);
+            await carApi.EditCar(id, car, token.ToString());
+            return true;
+        }
+        catch (ApiException ex)
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            return false;
+        }
     }
 }

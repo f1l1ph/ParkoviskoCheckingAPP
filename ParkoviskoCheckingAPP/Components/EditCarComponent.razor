@@ -1,0 +1,47 @@
+﻿@using ParkoviskoCheckingAPP.Data
+@inject CarService service
+
+@if (car != null)
+{
+    <EditForm Model="@car" OnValidSubmit="UpdateCar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <InputText id="name" @bind-Value="car.Name" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="plateNumber">Plate Number:</label>
+            <InputText id="plateNumber" @bind-Value="car.PlateNumber" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="expirationDate">Expiration Date:</label>
+            <InputDate id="expirationDate" @bind-Value="car.ExpirationDate" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <InputText id="description" @bind-Value="car.Description" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Car</button>
+    </EditForm>
+}
+else
+{
+    <div class="loader"></div>
+}
+
+@code {
+    [Parameter] public Car car { get; set; }
+    [Parameter] public EventCallback Refresh{ get; set; }
+
+    async Task UpdateCar()
+    {
+        await service.EditCar(car.ID, car);
+        await Refresh.InvokeAsync();
+    }
+}
