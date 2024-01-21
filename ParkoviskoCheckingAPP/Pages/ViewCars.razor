@@ -52,14 +52,14 @@
 </div>
 
 @code {
-    bool editing = false;
-    public Car carToEdit = null;
+    bool editing;
+    public Car carToEdit;
 
     //check for internet connection
     NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-    bool haveInternet = false;
-    private List<Car> cars = null;
-    bool haveRefreshed = false;
+    bool haveInternet;
+    private List<Car> cars;
+    bool haveRefreshed;
 
     protected override async Task OnInitializedAsync()
     {

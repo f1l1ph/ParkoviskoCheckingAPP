@@ -1,8 +1,9 @@
 ﻿@using ParkoviskoCheckingAPP.Data;
 @using ParkoviskoCheckingAPP.Components
 @using ParkoviskoCheckingAPP.services
+@using ParkoviskoCheckingAPP.Validations
 @inject CarService _carService
-@inject ValidationService _ValidationService
+@inject ValidationHelper ValidationHelper
 
 @page "/lpr"
 
@@ -39,18 +40,18 @@ else
 }
 
 @code {
-    bool editing = false;
+    bool editing;
     Car car;
     string plate;
-    bool triedToFind = false;
+    bool triedToFind;
 
-    bool invalidPlate = false;
+    bool invalidPlate;
 
     async Task FindCar()
     {
         if (string.IsNullOrEmpty(plate)) { return; }
 
-        if (!_ValidationService.ValidateLicensePlate(plate))
+        if (!ValidationHelper.ValidateLicensePlate(plate))
         {
             invalidPlate = true;
             return;

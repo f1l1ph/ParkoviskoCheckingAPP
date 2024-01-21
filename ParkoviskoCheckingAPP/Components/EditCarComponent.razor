@@ -1,7 +1,8 @@
 ﻿@using ParkoviskoCheckingAPP.Data
 @using ParkoviskoCheckingAPP.services
+@using ParkoviskoCheckingAPP.Validations
 @inject CarService service
-@inject ValidationService _ValidationService
+@inject ValidationHelper ValidationHelper
 
 @if (car != null)
 {
@@ -49,7 +50,7 @@ else
 
     async Task UpdateCar()
     {
-        if (_ValidationService.ValidateLicensePlate(car.PlateNumber))
+        if (ValidationHelper.ValidateLicensePlate(car.PlateNumber))
         {
             await service.EditCar(car.ID, car);
             await Refresh.InvokeAsync();

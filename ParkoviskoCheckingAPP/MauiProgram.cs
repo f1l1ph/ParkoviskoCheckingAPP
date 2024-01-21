@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using ParkoviskoCheckingAPP.services;
+using ParkoviskoCheckingAPP.Validations;
 
 namespace ParkoviskoCheckingAPP
 {
@@ -23,7 +24,7 @@ namespace ParkoviskoCheckingAPP
 #endif
 			builder.Services.AddSingleton<AuthenticationService>();
 			builder.Services.AddSingleton<CarService>();
-            builder.Services.AddSingleton<ValidationService>();
+            builder.Services.AddSingleton<ValidationHelper>();
 
             return builder.Build();
 		}

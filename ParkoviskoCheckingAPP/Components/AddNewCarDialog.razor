@@ -1,7 +1,8 @@
 ﻿@using ParkoviskoCheckingAPP.Data
 @using ParkoviskoCheckingAPP.services
-@inject CarService service
-@inject ValidationService validationService
+@using ParkoviskoCheckingAPP.Validations
+@inject CarService _carService
+@inject ValidationHelper ValidationHelper
 
 <h3>Pridaj nové auto</h3>
 
@@ -43,19 +44,16 @@
 
     private async Task AddCar()
     {
-        if (!await validationService.ValidateAndCheckLicensePlate(car.PlateNumber))
+        if (!await ValidationHelper.ValidateAndCheckLicensePlate(car.PlateNumber))
         {
             _wrongPlate = true;
             return;
         }
-        else
-        {
-            _wrongPlate = false;
-        }
+        _wrongPlate = false;
 
         if (car != null)
         {
-            await service.AddCar(car);
+            await _carService.AddCar(car);
             car.Name = null;
             car.PlateNumber = null;
             car.ExpirationDate = null;

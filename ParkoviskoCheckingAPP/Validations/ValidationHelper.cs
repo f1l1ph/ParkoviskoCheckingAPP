@@ -1,14 +1,15 @@
-﻿using Refit;
+﻿using ParkoviskoCheckingAPP.services;
+using Refit;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace ParkoviskoCheckingAPP.services;
+namespace ParkoviskoCheckingAPP.Validations;
 
-public class ValidationService
+public class ValidationHelper
 {
     private readonly IAPI _api;
 
-    public ValidationService()
+    public ValidationHelper()
     {
         _api = RestService.For<IAPI>(GlobalVars.CarApiUrl);
     }
@@ -20,7 +21,7 @@ public class ValidationService
             var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await AuthenticationService.GetToken());
             var car = await _api.CheckForExistingCar(licensePlate, token.ToString());
 
-            return (ValidateLicensePlate(licensePlate) && !car);
+            return ValidateLicensePlate(licensePlate) && !car;
         }
         catch (ApiException ex)
         {

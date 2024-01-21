@@ -7,7 +7,6 @@ public class AuthenticationService
 {
     private readonly IAPI _api;
 
-    private const string TokenKey = "AuthToken";
 
     public AuthenticationService()
     {
@@ -21,7 +20,7 @@ public class AuthenticationService
             var token = await _api.LoginUser(model);
             if(token != null)
             {
-                await SecureStorage.SetAsync(TokenKey, token.Token);
+                await SecureStorage.SetAsync(GlobalVars.TokenKey, token.Token);
                 return true;
             }
         }
@@ -35,6 +34,6 @@ public class AuthenticationService
 
     public static async Task<string> GetToken()
     {
-        return await SecureStorage.GetAsync(TokenKey);
+        return await SecureStorage.GetAsync(GlobalVars.TokenKey);
     }
 }
