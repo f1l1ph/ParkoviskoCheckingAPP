@@ -8,27 +8,24 @@
 
 <button class="btn btn-primary" @onclick="Refresh">Refresh</button>
 
-@if (haveInternet)
+@if (!haveInternet)
 {
-    <p>I have internet</p>
+    <p style="color: red;">Nemám internet ): </p>
 }
-else
-{
-    <p>I don't have internet ): </p>
-}
+
 
 <div class="centered">
     @if (cars == null || cars.Count == 0)
     {
         @if (cars != null && cars.Count == 0)
         {
-            <p><em>Haven't found any cars</em></p>
+            <p><em>Nenašiel som žiadne autá</em></p>
         }
         else
         {
             @if(cars == null && haveRefreshed)
             {
-                <p>No cars sorry</p>
+                <p>Žiadne autá</p>
             }
             else
             {

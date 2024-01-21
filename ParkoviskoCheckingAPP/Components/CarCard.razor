@@ -23,10 +23,10 @@
 
     <div class="card-body card-body-dark">
         <p><strong>ID:</strong> @car.ID</p>
-        <p><strong>Name:</strong> @car.Name</p>
-        <p><strong>Plate Number:</strong> @car.PlateNumber</p>
-        <p><strong>Expiration Date:</strong> @car.ExpirationDate</p>
-        <p><strong>Description:</strong> @car.Description</p>
+        <p><strong>Názov:</strong> @car.Name</p>
+        <p><strong>Špz:</strong> @car.PlateNumber</p>
+        <p><strong>Dátum zmazania:</strong> @car.ExpirationDate</p>
+        <p><strong>Popis:</strong> @car.Description</p>
     </div>
 </div>
 
@@ -44,8 +44,6 @@
     async Task DeleteCar()
     {
         await _carService.DeleteCar(car.ID);
-
-        //pop-up window asking if user really wants to delete car
 
         await Refresh.InvokeAsync();
     }

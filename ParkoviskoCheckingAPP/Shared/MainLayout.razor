@@ -7,18 +7,14 @@
     @if(authentificated != true)
     {
         <div class="login-container">
-            @if (haveInternet)
+            @if (!haveInternet)
             {
-                <p style="color:#00ff00">I have internet</p>
-            }
-            else
-            {
-                <p>error, no internet</p>
+                <p style="color:red;">error, žiadny internet</p>
             }
 
             @if(!authentificated && triedLogin)
             {
-                <p> <em>wrong username or password, sorry</em></p>
+                <p> <em>zlé meno alebo heslo</em></p>
             }
 
             @if (loading)
