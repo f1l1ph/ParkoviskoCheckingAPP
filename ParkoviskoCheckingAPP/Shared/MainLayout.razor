@@ -1,9 +1,7 @@
 ﻿@inherits LayoutComponentBase
-@using ParkoviskoCheckingAPP.Shared;
 @using ParkoviskoCheckingAPP.services;
-@inject AuthentificationService service
+@inject AuthenticationService service
 @using ParkoviskoCheckingAPP.Data
-@using System.Runtime.InteropServices
 
 <div class="page">
     @if(authentificated != true)
@@ -18,12 +16,12 @@
                 <p>error, no internet</p>
             }
 
-            @if(authentificated == false && triedLogin == true)
+            @if(!authentificated && triedLogin)
             {
                 <p> <em>wrong username or password, sorry</em></p>
             }
 
-            @if (loading == true)
+            @if (loading)
             {
                   <div class="loader"></div>
             }
@@ -51,7 +49,7 @@
         </div>
     }
 
-    @if (authentificated != false)
+    @if (authentificated)
     {
         <div class="sidebar">
             <NavMenu/>
@@ -86,7 +84,7 @@
     private async Task Login()
     {
         loading = true;
-        LoginModel model = new LoginModel { UserName = username, Email = "", Password = password };
+        var model = new LoginModel { Name = username, Email = "", Password = password };
         authentificated = await service.Login(model);
         triedLogin = true;
 
@@ -110,7 +108,7 @@
 
     private async Task LoginParam(string userName_, string password_)
     {
-        LoginModel model = new LoginModel { UserName = userName_, Email = "", Password = password_ };
+        var model = new LoginModel { Name = userName_, Email = "", Password = password_ };
         authentificated = await service.Login(model);
         loading = false;
         triedLogin = true;

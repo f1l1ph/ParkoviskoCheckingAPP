@@ -1,5 +1,6 @@
 ﻿@using ParkoviskoCheckingAPP.Data
-@inject CarService service
+@using ParkoviskoCheckingAPP.services
+@inject CarService _carService
 
 <div class="card card-dark">
     <div class="card-header card-header-dark" style="display: flex; justify-content: space-between; align-items: center;">
@@ -42,9 +43,9 @@
     }
     async Task DeleteCar()
     {
-        await service.DeleteCar(car.ID);
+        await _carService.DeleteCar(car.ID);
 
-        //pop-up window asking if user realy wants to delete car
+        //pop-up window asking if user really wants to delete car
 
         await Refresh.InvokeAsync();
     }

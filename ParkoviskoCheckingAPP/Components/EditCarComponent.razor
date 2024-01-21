@@ -1,5 +1,7 @@
 ﻿@using ParkoviskoCheckingAPP.Data
+@using ParkoviskoCheckingAPP.services
 @inject CarService service
+@inject ValidationService _ValidationService
 
 @if (car != null)
 {
@@ -14,6 +16,10 @@
 
         <div class="form-group">
             <label for="plateNumber">Plate Number:</label>
+            @if (invalidPlate)
+            {
+                <label style="color:red;">Neplatná Špz</label>
+            }
             <InputText id="plateNumber" @bind-Value="car.PlateNumber" class="form-control" required />
         </div>
 
@@ -39,9 +45,19 @@ else
     [Parameter] public Car car { get; set; }
     [Parameter] public EventCallback Refresh{ get; set; }
 
+    bool invalidPlate = false;
+
     async Task UpdateCar()
     {
-        await service.EditCar(car.ID, car);
-        await Refresh.InvokeAsync();
+        if (_ValidationService.ValidateLicensePlate(car.PlateNumber))
+        {
+            await service.EditCar(car.ID, car);
+            await Refresh.InvokeAsync();
+        }
+        else
+        {
+            invalidPlate = true;
+        }
+        
     }
 }

@@ -2,8 +2,9 @@
 
 @using Microsoft.AspNetCore.Components.Rendering
 @using ParkoviskoCheckingAPP.Data
-@inject CarService service
+@inject CarService _carService
 @using ParkoviskoCheckingAPP.Components
+@using ParkoviskoCheckingAPP.services
 
 <button class="btn btn-primary" @onclick="Refresh">Refresh</button>
 
@@ -75,7 +76,7 @@ else
 
     async Task Refresh()
     {
-        cars = await service.GetCarsAsync();
+        cars = await _carService.GetCarsAsync();
         haveRefreshed = true;
         editing = false;
     }
@@ -83,7 +84,7 @@ else
     async Task EditCar(int carID)
     {
         editing = true;
-        carToEdit = await service.GetCarAsync(carID);
+        carToEdit = await _carService.GetCarAsync(carID);
     }
 }
 

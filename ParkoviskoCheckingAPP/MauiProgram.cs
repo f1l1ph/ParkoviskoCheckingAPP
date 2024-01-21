@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
-using ParkoviskoCheckingAPP.Data;
 using ParkoviskoCheckingAPP.services;
 
 namespace ParkoviskoCheckingAPP
 {
-	public static class MauiProgram
+    public static class MauiProgram
 	{
 		public static MauiApp CreateMauiApp()
 		{
@@ -22,9 +21,9 @@ namespace ParkoviskoCheckingAPP
 			builder.Services.AddBlazorWebViewDeveloperTools();
 			builder.Logging.AddDebug();
 #endif
-			//builder.Services.AddHttpClient<AuthentificationService>();
-			builder.Services.AddSingleton<AuthentificationService>();
+			builder.Services.AddSingleton<AuthenticationService>();
 			builder.Services.AddSingleton<CarService>();
+            builder.Services.AddSingleton<ValidationService>();
 
             return builder.Build();
 		}

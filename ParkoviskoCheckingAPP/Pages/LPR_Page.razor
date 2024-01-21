@@ -1,45 +1,77 @@
 ﻿@using ParkoviskoCheckingAPP.Data;
-@inject CarService service
-
 @using ParkoviskoCheckingAPP.Components
+@using ParkoviskoCheckingAPP.services
+@inject CarService _carService
+@inject ValidationService _ValidationService
 
 @page "/lpr"
 
-<div class="custom_div">
-    <div>
-        <label for="licensePlate">Enter License Plate:</label>
-        <input type="text" @bind="plate" id="plate"/>
+@if (editing)
+{
+    <EditCarComponent car="car" Refresh="OnDelete" />
+}
+else
+{
+    <div class="custom_div">
+        <div>
+            <label for="licensePlate">Zadaj ŠPZ:</label>
+            @if (invalidPlate)
+            {
+                <label style="color:red;">Neplatná Špz</label>
+            }
+            <input type="text" @bind="plate" id="plate"/>
+        </div>
+        <br />
+        <button class="btn btn-primary" @onclick="FindCar">Skontroluj ŠPZ</button>
     </div>
-    <br />
-    <button class="btn btn-primary" @onclick="FindCar">Process License Plate</button>
-</div>
 
-<div class="card-container">
-    @if (car != null)
-    {
-        <CarCard car="car" Refresh="OnDelete" />
-    }
-    
-    @if(car == null && triedToFind == true)
-    {
-        <p>I am sorry but this car does not exist</p>
-    }
-</div>
+    <div class="card-container">
+        @if (car != null)
+        {
+            <CarCard car="car" Refresh="OnDelete" Edit="OnEdit"/>
+        }
+
+        @if (car == null && triedToFind == true)
+        {
+            <p>I am sorry but this car does not exist</p>
+        }
+    </div>
+}
+
 @code {
+    bool editing = false;
     Car car;
     string plate;
     bool triedToFind = false;
 
+    bool invalidPlate = false;
+
     async Task FindCar()
     {
-        car = await service.GetCarByPlateAsync(plate);
+        if (string.IsNullOrEmpty(plate)) { return; }
+
+        if (!_ValidationService.ValidateLicensePlate(plate))
+        {
+            invalidPlate = true;
+            return;
+        }
+        invalidPlate = false;
+
+        car = await _carService.GetCarByPlateAsync(plate);
         triedToFind = true;
     }
 
     void OnDelete()
     {
+        plate = string.Empty;
         triedToFind = false;
         car = null;
+        editing = false;
+    }
+
+    void OnEdit()
+    {
+        editing = true;
     }
 }
 

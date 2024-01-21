@@ -5,24 +5,27 @@ namespace ParkoviskoCheckingAPP.services;
 
 public interface IAPI
 {
-    [Get("/GetByID/{id}")]
+    [Get("/Car/GetByID/{id}")]
     Task<Car> GetCarByID(int id, [Header("Authorization")] string bearerToken);
 
-    [Get("/GetByPlate/{plate}")]
+    [Get("/Car/GetByPlate/{plate}")]
     Task<Car> GetCarByPlate(string plate, [Header("Authorization")] string bearerToken);
 
-    [Get("/GetAll")]
+    [Get("/Car/GetAll")]
     Task<List<Car>> GetAllCars([Header("Authorization")] string bearerToken);
 
-    [Get("/CheckForExisting/{plate}")]
-    Task<Car> CheckForExistingCar(string plate, [Header("Authorization")] string bearerToken);
+    [Get("/Car/CheckForExisting/{plate}")]
+    Task<bool> CheckForExistingCar(string plate, [Header("Authorization")] string bearerToken);
 
-    [Post("/Create")]
+    [Post("/Car/Create")]
     Task CreateNewCar(Car car, [Header("Authorization")] string bearerToken);
 
-    [Post("/Edit")]
+    [Post("/Car/Edit")]
     Task<bool> EditCar (int id, Car car, [Header("Authorization")] string bearerToken);
 
-    [Delete("/DeleteById/{id}")]
+    [Delete("/Car/DeleteById/{id}")]
     Task<bool> DeleteCar(int id, [Header("Authorization")] string bearerToken);
+
+    [Post("/User/login")]
+    Task<TokenLoginModel> LoginUser(LoginModel model);
 }
