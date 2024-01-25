@@ -32,9 +32,9 @@ else
             <CarCard car="car" Refresh="OnDelete" Edit="OnEdit"/>
         }
 
-        @if (car == null && triedToFind == true)
+        @if (car == null && triedToFind)
         {
-            <p>I am sorry but this car does not exist</p>
+            <p>Toto auto neexistuje</p>
         }
     </div>
 }

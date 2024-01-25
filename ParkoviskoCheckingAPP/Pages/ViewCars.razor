@@ -1,12 +1,11 @@
 ﻿@page "/ViewCars"
 
-@using Microsoft.AspNetCore.Components.Rendering
 @using ParkoviskoCheckingAPP.Data
 @inject CarService _carService
 @using ParkoviskoCheckingAPP.Components
 @using ParkoviskoCheckingAPP.services
 
-<button class="btn btn-primary" @onclick="Refresh">Refresh</button>
+<button class="btn btn-primary" @onclick="Refresh">Obnov autá</button>
 
 @if (!haveInternet)
 {
