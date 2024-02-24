@@ -2,6 +2,9 @@
 @using ParkoviskoCheckingAPP.Components
 @using ParkoviskoCheckingAPP.services
 @using ParkoviskoCheckingAPP.Validations
+@using Refit
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.Net.Http.Headers
 @inject CarService _carService
 @inject ValidationHelper ValidationHelper
 
@@ -15,15 +18,17 @@ else
 {
     <div class="custom_div">
         <div>
-            <label for="licensePlate">Zadaj ŠPZ:</label>
+            <label for="licensePlate">Zadaj EČV:</label>
             @if (invalidPlate)
             {
-                <label style="color:red;">Neplatná Špz</label>
+                <label style="color:red;">Neplatná EČV</label>
             }
             <input type="text" @bind="plate" id="plate"/>
         </div>
         <br />
-        <button class="btn btn-primary" @onclick="FindCar">Skontroluj ŠPZ</button>
+        <button class="btn btn-primary" @onclick="FindCar">Skontroluj EČV</button>
+
+        <InputFile OnChange="@LoadFiles" multiple/>
     </div>
 
     <div class="card-container">
@@ -44,6 +49,8 @@ else
     Car car;
     string plate;
     bool triedToFind;
+
+    bool carExists;
 
     bool invalidPlate;
 
@@ -73,6 +80,30 @@ else
     void OnEdit()
     {
         editing = true;
+    }
+
+    async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        var stream = e.File.OpenReadStream(e.File.Size);
+        var fileBytes = await ReadFileBytesAsync(e.File, 10000);
+
+        var result = await _carService.CheckLicensePlateByImageTask(new ByteArrayPart(fileBytes, e.File.Name, e.File.ContentType));
+    }
+
+    public static async Task<byte[]> ReadFileBytesAsync(IBrowserFile file, int timeoutMilliseconds)
+    {
+        using var memoryStream = new MemoryStream();
+        using var cancellationTokenSource = new CancellationTokenSource(timeoutMilliseconds);
+
+        try
+        {
+            await file.OpenReadStream().CopyToAsync(memoryStream, cancellationTokenSource.Token);
+            return memoryStream.ToArray();
+        }
+        catch (OperationCanceledException)
+        {
+            throw new TimeoutException("Reading file timed out.");
+        }
     }
 }
 

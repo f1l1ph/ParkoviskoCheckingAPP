@@ -37,7 +37,7 @@
         @if (editing == false)
         {
             <div class="card-container">
-                @foreach (var car_ in cars)
+                @foreach (var car_ in DisplayedCars)
                 {
                     <CarCard car="car_" Refresh="Refresh" Edit="EditCar" />
                 }
@@ -50,6 +50,12 @@
     }
 </div>
 
+<div class="centered">
+    <button class="btn btn-primary" disabled="@IsFirstPage" @onclick="GoToPreviousPage">Naspäť</button>
+    <span>Strana @_currentPage z @TotalPages</span>
+    <button class="btn btn-primary" disabled="@IsLastPage" @onclick="GoToNextPage">Ďalej</button>
+</div>
+
 @code {
     bool editing;
     public Car carToEdit;
@@ -57,17 +63,24 @@
     //check for internet connection
     NetworkAccess accessType = Connectivity.Current.NetworkAccess;
     bool haveInternet;
+
     private List<Car> cars;
     bool haveRefreshed;
 
+    //pagination
+    private int _currentPage = 1;
+    private const int ItemsPerPage = 20;
+    private List<Car> DisplayedCars;
+    private int TotalPages;
+    private bool IsFirstPage;
+    private bool IsLastPage;
+
+
     protected override async Task OnInitializedAsync()
     {
-        await Refresh();  
+        await Refresh();
 
-        if (accessType == NetworkAccess.Internet)
-        {
-            haveInternet = true;
-        }
+        haveInternet = (accessType == NetworkAccess.Internet);
     }
 
     async Task Refresh()
@@ -75,12 +88,43 @@
         cars = await _carService.GetCarsAsync();
         haveRefreshed = true;
         editing = false;
+
+        _currentPage = 1;
+        DisplayedCars = cars.Skip((_currentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
+        TotalPages = (int)Math.Ceiling((double)cars.Count / ItemsPerPage);
+        IsFirstPage = _currentPage == 1;
+        IsLastPage = _currentPage == TotalPages;
     }
 
     async Task EditCar(int carID)
     {
         editing = true;
         carToEdit = await _carService.GetCarAsync(carID);
+    }
+
+    private void GoToNextPage()
+    {
+        if (!IsLastPage)
+        {
+            _currentPage++;
+
+            DisplayedCars = cars.Skip((_currentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
+            IsFirstPage = _currentPage == 1;
+            IsLastPage = _currentPage == TotalPages;
+
+        }
+    }
+
+    private void GoToPreviousPage()
+    {
+        if (!IsFirstPage)
+        {
+            _currentPage--;
+
+            DisplayedCars = cars.Skip((_currentPage - 1) * ItemsPerPage).Take(ItemsPerPage).ToList();
+            IsFirstPage = _currentPage == 1;
+            IsLastPage = _currentPage == TotalPages;
+        }
     }
 }
 

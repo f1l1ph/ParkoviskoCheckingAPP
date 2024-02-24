@@ -11,7 +11,7 @@
     <ValidationSummary />
     @if (_wrongPlate)
     {
-        <label> zlý formát špz</label>
+        <label> zlý formát EČV</label>
     }
 
     <div class="form-group">
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group">
-        <label for="PlateNumber">ŠPZ:</label>
+        <label for="PlateNumber">EČV:</label>
         <InputText id="PlateNumber" class="form-control" @bind-Value="car.PlateNumber" />
     </div>
 

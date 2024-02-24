@@ -1,4 +1,6 @@
-﻿using ParkoviskoCheckingAPP.Data;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ParkoviskoCheckingAPP.Data;
 using Refit;
 using System.Diagnostics;
 
@@ -100,6 +102,20 @@ public class CarService
         {
             Debug.WriteLine(@"\tERROR {0}", ex.Message);
             return false;
+        }
+    }
+
+    public async Task<IActionResult> CheckLicensePlateByImageTask([FromForm] ByteArrayPart image)
+    {
+        try
+        {
+            var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await AuthenticationService.GetToken());
+            return await _api.CheckPlateByImage(image, token.ToString());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return null;
         }
     }
 }
