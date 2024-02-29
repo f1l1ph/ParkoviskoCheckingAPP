@@ -5,7 +5,7 @@ This is my repository for a school project. The project contains:
 - Database
 - Web Api 1([ParkingAppWebApi](https://github.com/f1l1ph/ParkingAppWebApi/) repository)
 - Mobile app(this repository)
-- Web Api 2(![PythonBackend-parkingApp](https://github.com/f1l1ph/ParkoviskoCheckingAPP) repository)
+- Web Api 2(![PythonBackend-parkingApp](https://github.com/f1l1ph/PythonBackend-parkingApp) repository)
 
 Project was made to check on whether cars on school parking lots belong to students and teachers or to someone else who isn't related to school. 
 License plate numbers and details are all stored in database and Web Api 1 is communicating with database. 
