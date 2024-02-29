@@ -3,7 +3,7 @@
 This is my repository for a school project. The project contains:
 
 - Database
-- Web Api 1([ParkingAppWebApi](https://github.com/f1l1ph/ParkingAppWebApi/) repository)
+- Web Api 1(![ParkingAppWebApi](https://github.com/f1l1ph/ParkingAppWebApi/) repository)
 - Mobile app(this repository)
 - Web Api 2(![PythonBackend-parkingApp](https://github.com/f1l1ph/PythonBackend-parkingApp) repository)
 
