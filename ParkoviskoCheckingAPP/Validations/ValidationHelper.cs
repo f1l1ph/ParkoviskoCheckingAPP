@@ -21,7 +21,7 @@ public class ValidationHelper
             var token = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await AuthenticationService.GetToken());
             var car = await _api.CheckForExistingCar(licensePlate, token.ToString());
 
-            return ValidateLicensePlate(licensePlate) && !car;
+            return true; //!car; //ValidateLicensePlate(licensePlate) && !car;
         }
         catch (ApiException ex)
         {

@@ -3,8 +3,6 @@
 @using ParkoviskoCheckingAPP.services
 @using ParkoviskoCheckingAPP.Validations
 @using Refit
-@using Microsoft.AspNetCore.Mvc
-@using Microsoft.Net.Http.Headers
 @inject CarService _carService
 @inject ValidationHelper ValidationHelper
 
@@ -22,6 +20,10 @@ else
             @if (invalidPlate)
             {
                 <label style="color:red;">Neplatná EČV</label>
+            }
+            @if (plateNotFound)
+            {
+                <label style="color:red;">Nenašiel som EČV</label>
             }
             <input type="text" @bind="plate" id="plate"/>
         </div>
@@ -41,6 +43,10 @@ else
         {
             <p>Toto auto neexistuje</p>
         }
+        @if (loading)
+        {
+            <div class="loader"></div>
+        }
     </div>
 }
 
@@ -53,6 +59,8 @@ else
     bool carExists;
 
     bool invalidPlate;
+    bool plateNotFound;
+    bool loading;
 
     async Task FindCar()
     {
@@ -67,6 +75,8 @@ else
 
         car = await _carService.GetCarByPlateAsync(plate);
         triedToFind = true;
+        plateNotFound = false;
+
     }
 
     void OnDelete()
@@ -75,19 +85,42 @@ else
         triedToFind = false;
         car = null;
         editing = false;
+        plateNotFound = false;
+
     }
 
     void OnEdit()
     {
         editing = true;
+        plateNotFound = false;
+
     }
 
     async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        var stream = e.File.OpenReadStream(e.File.Size);
+        loading = true;
+        invalidPlate = false;
+        plateNotFound = false;
+
         var fileBytes = await ReadFileBytesAsync(e.File, 10000);
 
         var result = await _carService.CheckLicensePlateByImageTask(new ByteArrayPart(fileBytes, e.File.Name, e.File.ContentType));
+        result = result.Replace("\"", "");
+        result = result.Replace("_", "");
+
+        if (result.Contains("License Plate Not Found. Retry with different image."))
+        {
+            plate = null;
+            plateNotFound = true;
+        }
+        else
+        {
+            plate = result;
+            invalidPlate = false;
+            plateNotFound = false;
+        }
+
+        loading = false;
     }
 
     public static async Task<byte[]> ReadFileBytesAsync(IBrowserFile file, int timeoutMilliseconds)
@@ -97,7 +130,7 @@ else
 
         try
         {
-            await file.OpenReadStream().CopyToAsync(memoryStream, cancellationTokenSource.Token);
+            await file.OpenReadStream(file.Size).CopyToAsync(memoryStream, cancellationTokenSource.Token);
             return memoryStream.ToArray();
         }
         catch (OperationCanceledException)

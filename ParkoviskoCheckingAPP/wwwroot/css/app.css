@@ -100,7 +100,7 @@ a, .btn-link {
 }
 
 .card-dark {
-    color: #fff; /* Light text color for dark theme */
+    color: #fff;
 }
 
 .card-header {
@@ -115,7 +115,7 @@ a, .btn-link {
 }
 
 .card-body-dark {
-    color: #ccc; /* Lighter text color for dark theme */
+    color: #ccc;
 }
 
 .image-button {

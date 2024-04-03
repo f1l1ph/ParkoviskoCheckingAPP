@@ -53,7 +53,10 @@
 
         if (car != null)
         {
-            await _carService.AddCar(car);
+            if (await _carService.AddCar(car))
+            {
+
+            }
             car.Name = null;
             car.PlateNumber = null;
             car.ExpirationDate = null;

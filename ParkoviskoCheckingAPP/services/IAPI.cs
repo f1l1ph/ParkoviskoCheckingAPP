@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ParkoviskoCheckingAPP.Data;
 using Refit;
 
@@ -32,6 +31,6 @@ public interface IAPI
     Task<TokenLoginModel> LoginUser(LoginModel model);
 
     [Post("/CheckLicensePlate/")]
-    Task<IActionResult> CheckPlateByImage([AliasAs("image")] ByteArrayPart image, [Header("Authorization")] string bearerToken);
+    Task<string> CheckPlateByImage([AliasAs("image")] ByteArrayPart image, [Header("Authorization")] string bearerToken);
 
 }
